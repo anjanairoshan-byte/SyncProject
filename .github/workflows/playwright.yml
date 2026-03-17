@@ -17,8 +17,10 @@ jobs:
       run: npm ci
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
+    - name: Install xvfb # Required for running Playwright tests in headless mode on Linux
+      run: sudo apt-get install xvfb
     - name: Run Playwright tests
-      run: npx playwright test
+      run: xvfb-run --auto-servernum -- npx playwright test # Run tests with xvfb-run to provide a virtual display
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
